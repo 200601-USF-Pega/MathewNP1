@@ -10,6 +10,16 @@
 <body>
     <div id="app">
         <h1>{{test}} </h1>
+
+        <h2>Users</h2>
+        <!-- <h2>
+        {{usersObj}}
+        </h2> -->
+
+        <ul>
+            <li v-for="user in usersObj">{{user.firstName}} {{user.lastName}} </li>
+        </ul>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="app.js"></script>

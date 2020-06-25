@@ -1,17 +1,19 @@
-fetch("http://www.localhost:8080/api/userResource/users")
-.then(res =>{
-    if(res.ok) {
-        console.log("Sucess")
-    } else {
-        console.log("Not Sucessful");
-    }
-})
-.then(data => console.log(data))
+var userArr = {}
+
 
 app = new Vue({
     el: "#app",
-    data: {
-        test: "hello"
+    data() {
+        return {
+            test: "Hello",
+            usersObj: null
+        }
+    },
+    mounted() {
+        fetch("http://www.localhost:8080/api/userResource/users")
+            .then(res => res.json())
+            .then(data => this.usersObj = data)
     }
+
 
 });
