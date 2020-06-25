@@ -1,0 +1,15 @@
+
+#eclipse generation
+.classpath
+.project
+.settings
+target
+.eclipse
+
+#db credentials
+Props.java
+
+
+
+#view
+node_modules
