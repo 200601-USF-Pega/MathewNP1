@@ -16,14 +16,11 @@ import com.revature.LibraryRestAPI.services.ConnectionService;
 
 public class CatalogRepoDB {
 
-    public void addInventory(int book_id, int count)  {
+    public void addInventory(int book_id)  {
         try {
-            PreparedStatement bookCopyStatement= ConnectionService.getInstance().getConnection().
-                    prepareStatement("INSERT INTO Inventory(book_id) VALUES(?)");
-            bookCopyStatement.setString(1, Integer.toString(book_id));
-            for (int i =0; i< count; i++) {
-                bookCopyStatement.executeUpdate();
-            }
+            Statement bookCopyStatement= ConnectionService.getInstance().getConnection().createStatement();
+            bookCopyStatement.executeUpdate("INSERT INTO Inventory(book_id) VALUES(" + book_id + ")");
+
         } catch (SQLException e ) {
             System.out.println("Exception: " + e.getMessage());
         }

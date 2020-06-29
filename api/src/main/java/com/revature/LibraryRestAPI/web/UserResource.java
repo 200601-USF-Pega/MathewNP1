@@ -22,9 +22,9 @@ public class UserResource {
 	    @Produces("application/json")
 	  	@GET
 	  	@Path("/user")
-	  	public Response getUser() { 
+	  	public Response getUser(User user) { 
 	  		System.out.println("getting called");
-	  		User user = new User(); user.setFirstName("navin");
+	  		user = new User(); user.setFirstName("navin");
 	  		user.setLastName("mathew");
 	  		return Response.ok(user, MediaType.APPLICATION_JSON).build(); 
 	  	}

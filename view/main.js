@@ -1,11 +1,11 @@
-var admin = new Vue ({
-  el : "#admin",
-  data: {
-    title: "Admin Menu",
-    showAdminUser: true,
-    showAdminBooks: false,
-  }
-}) 
+// var admin = new Vue ({
+//   el : "#admin",
+//   data: {
+//     title: "Admin Menu",
+//     showAdminUser: true,
+//     showAdminBooks: false,
+//   }
+// }) 
 
 
 var admin_user = new Vue({
@@ -37,7 +37,7 @@ var admin_user = new Vue({
       console.log("fetching users...")
       fetch("http://www.localhost:8080/api/userResource/users")
         .then(res => res.json())
-        .then(data => this.usersArr= (data))
+        .then(data => this.usersArr = (data))
     },
 
     addUser: function () {
@@ -69,7 +69,7 @@ var admin_user = new Vue({
 
     updateUser: function () {
       //this.currentUser = this.selectUser(user);
-      console.log(this.currentUser.firstName); 
+      //console.log(this.currentUser.firstName);
       fetch("http://www.localhost:8080/api/userResource/user", {
         method: 'PUT',
         body: JSON.stringify(this.currentUser),
@@ -77,25 +77,25 @@ var admin_user = new Vue({
       }
       ).then(res => res.text())          // convert to plain text
         .then(text => console.log(text))
-        this.getAllUsers();
+      this.getAllUsers();
     },
 
     deleteUser: function () {
-       fetch("http://www.localhost:8080/api/userResource/user", {
+      fetch("http://www.localhost:8080/api/userResource/user", {
         method: 'DELETE',
         body: JSON.stringify(this.currentUser),
         headers: new Headers({ 'content-type': 'application/json' }),
       }
       ).then(res => res.text())          // convert to plain text
         .then(text => console.log(text))
-        this.getAllUsers();
+      this.getAllUsers();
     },
 
     selectUser(user) {
       this.currentUser = user;
     }
 
-    
+
   }
 
 
@@ -104,7 +104,70 @@ var admin_user = new Vue({
 
 
 var admin_books = new Vue({
-  el: "#admin_books"
+  el: "#admin_books",
+  data: {
+    title: "Books",
+    errorMsg: false,
+    successMsg: false,
+    showCounter: false,
+    newCatalog: {
+      title: "",
+      author: {
+        firstName: "",
+        lastName: ""
+      },
+      catgeory: "",
+      copies: ""
+    },
+
+    catalogArr: [],
+    currentCatalog: {}
+  },
+
+  mounted: function () {
+    this.getCatalog();
+  },
+
+  methods: {
+    getCatalog: function () {
+      console.log("fetching the catalog...")
+      fetch("http://www.localhost:8080/api/catalog/books")
+        .then(res => res.json())
+        .then(data => this.catalogArr = (data))
+    },
+
+    addCopies: function (catalog) {
+      this.selectCatalog(catalog);
+      selectedCatalog = this.currentCatalog
+      delete selectedCatalog.book.author.fullName;
+      fetch("http://www.localhost:8080/api/catalog/book", {
+        method: "POST",
+        body: JSON.stringify(selectedCatalog),
+        headers: new Headers({ 'content-type': 'application/json' }),
+
+      })
+      this.getCatalog();
+    },
+
+    deleteCopies: function (catalog) {
+      this.selectCatalog(catalog);
+      selectedCatalog = this.currentCatalog
+      delete selectedCatalog.book.author.fullName;
+      fetch("http://www.localhost:8080/api/catalog/book", {
+        method: "DELETE",
+        body: JSON.stringify(selectedCatalog),
+        headers: new Headers({ 'content-type': 'application/json' }),
+      })
+      this.getCatalog();
+    },
+
+    selectCatalog: function (catalog) {
+      this.currentCatalog = catalog;
+    }
+
+
+  }
+
 });
 
 
@@ -119,10 +182,10 @@ var loginApp = new Vue({
   },
 
   beforeCreate() {
-    // console.log("fetching users...")
-    // fetch("http://www.localhost:8080/api/userResource/users")
-    // .then(res => res.json())
-    // .then(data => this.usersObj = (data))
+     console.log("fetching users...")
+     fetch("http://www.localhost:8080/api/userResource/users")
+     .then(res => res.json())
+     .then(data => this.usersArr= (data))
   },
 
   methods: {
@@ -132,7 +195,14 @@ var loginApp = new Vue({
       var result = this.check();
       console.log("The result is: " + result)
       result ? alert("login success") : alert("username/password wrong.")
-      console.log(result.access)
+      if(result.access = "ADMIN") {
+        //go to admin
+        window.location.href = '/admin.html';
+      } else if (result.access = "PATRON") {
+        window.location.href= "/patron.html";
+      } else {
+       //banned.
+      }
     },
 
     check: function () {
