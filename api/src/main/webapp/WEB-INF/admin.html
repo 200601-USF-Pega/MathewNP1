@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <style type="text/css">
+        #overlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.6);
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- has to do a hamburger when reduced -->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-3 px-1 bg-dark position-fixed" id="sticky-sidebar">
+                <div class="nav flex-column flex-nowrap vh-100 overflow-auto text-white p-2">
+                    <a href="./" class="nav-link">Link</a>
+                    <a href="./" class="nav-link">Link</a>
+                    <a href="./" class="nav-link">Logout.</a>
+                </div>
+            </div>
+
+
+
+
+            <div class="col-9 offset-3" id="main">
+                <div id="app">
+                    <div class="container-fluid">
+                        <div class="row bg-dark">
+                            <div class="col-lg-12">
+                                <p class="text-center text-light display-4 pt-2" style="font-size:25px">CRUD Application
+                                    Using
+                                    Vue.js</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row mt-3">
+                            <div class="col-lg-6">
+                                <h3 class="text-info">Registered Users</h3>
+                            </div>
+                            <div class="col-lg-6">
+                                <button class="btn btn-info float-right" @click="showAddModal=true">
+                                    <i class="fas fa-user"></i>&nbsp;&nbsp;Add New User
+                                </button>
+                            </div>
+                        </div>
+                        <hr class="bg-info">
+                        <div class="alert alert-danger" v-if="errorMsg">
+                            Error Message
+                        </div>
+                        <div class="alert alert-success" v-if="successMsg">
+                            Success Message
+                        </div>
+
+                        <!-- Displaying Records -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr class="text-center bg-info text-ligth">
+                                            <th>Username</th>
+                                            <th>Password</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Access</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="text-center" v-for = "user in usersObj">
+                                            <td>{{user.userName}}</td>
+                                            <td>{{user.pwd}}</td>
+                                            <td>{{user.firstName}}</td>
+                                            <td>{{user.lastName}}</td>
+                                            <td>{{user.access}}</td>
+                                            <td><a href="#" class="text-success" @click="showEditModal=true"><i class="fas fa-edit"></i></td>
+                                            <td><a href="#" class="text-danger" @click="showDeleteModal=true"><i class="fas fa-trash"></i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add New User Model -->
+                    <div id="overlay" v-if="showAddModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Add New User</h5>
+                                    <button type="button" class="close" @click="showAddModal=false">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <form action="#" method="post">
+
+                                        <div class="form-group">
+                                            <input type="text" name="username" class="form-control form-control-lg"
+                                                placeholder="Username" v-model = "newUser.userName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="password" class="form-control form-control-lg"
+                                                placeholder="Password" v-model = "newUser.pwd">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="firstname" class="form-control form-control-lg"
+                                                placeholder="First Name" v-model= "newUser.firstName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="lastname" class="form-control form-control-lg"
+                                                placeholder="Last Name" v-model ="newUser.lastName">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="access" class="form-control form-control-lg"
+                                                placeholder="Access" v-model = "newUser.access">
+                                        </div>
+
+                                        <div class="form-group" @click="showAddModal=false; addUser();">
+                                            <button  type="submit" class="btn btn-info btn-block btn-large">
+                                                Add User</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                     <!-- Edit User Model -->
+                    <div id="overlay" v-if="showEditModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit User</h5>
+                                    <button type="button" class="close" @click="showEditModal=false">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <form action="#" method="post">
+
+                                        <div class="form-group">
+                                            <input type="text" name="username" class="form-control form-control-lg"
+                                                placeholder="Username">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="password" class="form-control form-control-lg"
+                                                placeholder="Password">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="firstname" class="form-control form-control-lg"
+                                                placeholder="First Name">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="lastname" class="form-control form-control-lg"
+                                                placeholder="Last Name">
+                                        </div>
+                                        <div class="form-group" @click="showEditModal=false">
+                                            <button type="submit" class="btn btn-info btn-block btn-large">
+                                                Update User</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                        <!-- Delete User Model -->
+                    <div id="overlay" v-if="showDeleteModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Delete User</h5>
+                                    <button type="button" class="close" @click="showDeleteModal=false">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body p-4">
+                                   <h4 class="text-danger">Are you sure you want to delete this user?</h4> 
+                                   <h5>You are deleting  user 1</h5>
+                                   <hr>
+                                   <button class="btn btn-danger btn-lg" @click="showDeleteModal=false">Yes</button>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;
+                                   <button type="submit" class="btn btn-success btn-lg" @click="showDeleteModal=false">No</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    
+                </div>
+
+            </div>
+            <script src="https://kit.fontawesome.com/e88d584673.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+            <!-- <script src="https://cdn.jsdelivr.net/npm/node-libcurl@2.1.3/dist/index.min.js"></script> -->
+            <script src="main.js"></script>
+
+
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

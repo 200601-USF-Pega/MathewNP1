@@ -1,21 +1,24 @@
 package com.revature.LibraryRestAPI.web;
 
-import com.revature.LibraryRestAPI.models.User;
-import com.revature.LibraryRestApi.dao.UserRepoDB;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import com.revature.LibraryRestAPI.models.User;
+import com.revature.LibraryRestAPI.services.EditUserService;
+import com.revature.LibraryRestApi.dao.UserRepoDB;
 
 @Path("/userResource")
 public class UserResource {
 
-	
+		private UserRepoDB userRepoDb = new UserRepoDB();
+		
 	    @Produces("application/json")
 	  	@GET
 	  	@Path("/user")
@@ -29,17 +32,43 @@ public class UserResource {
 	
 	    @POST
 	    @Consumes(MediaType.APPLICATION_JSON)
-	    @Path("/newUser")
+	    @Path("/user")
 	    public Response putUsers(User user) {
-	    	System.out.println("putUsers getting called.");
+	    	//System.out.println("putUsers getting called.");
 	    	System.out.println(user);
+
 	 		UserRepoDB userRepoDB = new UserRepoDB();
 	 		userRepoDB.addUser(user);
-	 		return Response.ok().build();
+	 		return Response.status(200)
+	 			      .entity("")
+	 			      .build();	
+	    }
+	    
+	    @PUT
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    @Path("/user")
+	    public Response editUser(User user) {
+	    	//System.out.println("putUsers getting called.");
+	    	//System.out.println(user);
+	    	EditUserService editService = new EditUserService();
+	    	editService.editUser(user);
+	 		return Response.status(200)
+	 			      .entity("")
+	 			      .build();	
 	    }
 	    
 	    
-	    
+	    @DELETE
+	    @Consumes(MediaType.APPLICATION_JSON)
+	    @Path("/user")
+	    public Response deleteUser(User user) {
+
+	 		UserRepoDB userRepoDB = new UserRepoDB();
+	 		userRepoDB.deleteUser(user);
+	 		return Response.status(200)
+	 			      .entity("")
+	 			      .build();	
+	    }
 	    
 	 	@GET
 	    @Produces("application/json")
