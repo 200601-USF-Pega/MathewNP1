@@ -1,19 +1,21 @@
 package com.revature.LibraryRestAPI.services;
 
 
-import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.revature.LibraryRestAPI.web.Props;
 
 public class ConnectionService {
 
+
     private static ConnectionService  connectionSingleton = null;
     private Connection connection;
-    private static Logger logger = Logger.getLogger("Connection.class");
+    private static Logger logger = LogManager.getLogger(ConnectionService.class);
+
 
     public ConnectionService() {
         try  {

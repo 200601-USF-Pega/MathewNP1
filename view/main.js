@@ -182,10 +182,10 @@ var loginApp = new Vue({
   },
 
   beforeCreate() {
-     console.log("fetching users...")
-     fetch("http://www.localhost:8080/api/userResource/users")
-     .then(res => res.json())
-     .then(data => this.usersArr= (data))
+    console.log("fetching users...")
+    fetch("http://www.localhost:8080/api/userResource/users")
+      .then(res => res.json())
+      .then(data => this.usersArr = (data))
   },
 
   methods: {
@@ -193,15 +193,15 @@ var loginApp = new Vue({
       console.log({ userName: this.username, password: this.password });
       //alert('Processing');
       var result = this.check();
-      console.log("The result is: " + result)
+      console.log("The access is: " + result.access)
       result ? alert("login success") : alert("username/password wrong.")
-      if(result.access = "ADMIN") {
-        //go to admin
+
+      if (result.access == "ADMIN") {
         window.location.href = '/admin.html';
-      } else if (result.access = "PATRON") {
-        window.location.href= "/patron.html";
+      } else if (result.access == "PATRON") {
+        window.location.href = "/patron.html";
       } else {
-       //banned.
+        window.location.href = "/banned.html";
       }
     },
 
@@ -217,5 +217,100 @@ var loginApp = new Vue({
     }
 
   }
+
+});
+
+
+var patron_history = new Vue({
+  el: "#patron_history",
+
+  data: {
+    title: "Patron Menu",
+    errorMsg: false,
+    successMsg: false,
+    showCounter: false,
+    currentUser: {
+      access: "ADMIN",
+      firstName: "Mathew",
+      lastName: "Navin",
+      pwd: "lolpro1992",
+      userName: "nmathew13"
+    },
+
+    newHistory: {
+      endDate: "",
+      rental: {
+        user: {
+          userName: "",
+          pwd: "",
+          firstName: "",
+          lastName: "",
+          access: ""
+        },
+        startDate: "",
+        book: {
+          title: "",
+          author: {
+            firstName: "",
+            lastName: "",
+            fullName: "",
+          },
+          category: ""
+        }
+      }
+    },
+
+
+    historyArr: [
+      {
+        "endDate": "2020-06-17 05:56:55",
+        "rental": {
+          "user": {
+            "userName": "nmathew13",
+            "pwd": "lolpro1992",
+            "firstName": "Mathew",
+            "lastName": "Navin",
+            "access": "ADMIN"
+          },
+          "startDate": "2020-06-17 05:56:45",
+          "book": {
+            "title": "Founding Giant",
+            "author": {
+              "firstName": "hajime",
+              "lastName": "isayama",
+              "fullName": "hajime isayama"
+            },
+            "category": "non-fiction"
+          }
+        }
+      },
+      {
+        "endDate": "2020-06-17 06:11:32",
+        "rental": {
+          "user": {
+            "userName": "nmathew13",
+            "pwd": "lolpro1992",
+            "firstName": "Mathew",
+            "lastName": "Navin",
+            "access": "ADMIN"
+          },
+          "startDate": "2020-06-17 05:55:02",
+          "book": {
+            "title": "crossroads",
+            "author": {
+              "firstName": "leo",
+              "lastName": "tolstoy",
+              "fullName": "leo tolstoy"
+            },
+            "category": "auto-biography"
+          }
+        }
+      }
+    ],
+    
+    currentHistory: {}
+  },
+
+
 
 });
