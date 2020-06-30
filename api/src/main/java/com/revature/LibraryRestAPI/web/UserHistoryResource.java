@@ -85,6 +85,6 @@ public class UserHistoryResource {
 //	                .type(MediaType.APPLICATION_JSON_TYPE)
 //	                .build();
 //	    }
-	
+//	
 	
 }

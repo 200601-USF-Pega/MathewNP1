@@ -121,7 +121,8 @@ var admin_books = new Vue({
     },
 
     catalogArr: [],
-    currentCatalog: {}
+    currentCatalog: {},
+    currentNum: null 
   },
 
   mounted: function () {
@@ -140,6 +141,7 @@ var admin_books = new Vue({
       this.selectCatalog(catalog);
       selectedCatalog = this.currentCatalog
       delete selectedCatalog.book.author.fullName;
+
       fetch("http://www.localhost:8080/api/catalog/book", {
         method: "POST",
         body: JSON.stringify(selectedCatalog),
@@ -314,3 +316,5 @@ var patron_history = new Vue({
 
 
 });
+
+
